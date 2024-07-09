@@ -37,13 +37,18 @@
 			display_num();
 		}
 
+		function sqrt() {
+			invoke('square_root');
+			display_num();
+		}
+
 	</script>
 	<div id="display">
 		<p id="disp">a</p>
 	</div>
 	<button class="button" type="button" onclick="del()">DEL</button>
 	<button class="button" type="button" onclick="clr()">CLR</button>
-	<button class="button" type="button">SQRT</button>
+	<button class="button" type="button" onclick="sqrt()">SQRT</button>
 	<button class="button" type="button">/</button>
 	<br>
 	<button class="button" type="button" onclick="inp('7')">7</button>
