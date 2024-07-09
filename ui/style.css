@@ -1,0 +1,10 @@
+.button {
+	width: 45px;
+	height: 45px;
+}
+
+#display {
+	width: 180px;
+	height: 45px;
+	text-align: right;
+}
