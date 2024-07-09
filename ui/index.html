@@ -32,6 +32,11 @@
 			display_num();
 		}
 
+		function flp() {
+			invoke('flip_sign');
+			display_num();
+		}
+
 	</script>
 	<div id="display">
 		<p id="disp">a</p>
@@ -56,7 +61,7 @@
 	<button class="button" type="button" onclick="inp('3')">3</button>
 	<button class="button" type="button">+</button>
 	<br>
-	<button class="button" type="button">+/-</button>
+	<button class="button" type="button" onclick="flp()">+/-</button>
 	<button class="button" type="button" onclick="inp('0')">0</button>
 	<button class="button" type="button" onclick="inp('.')">.</button>
 	<button class="button" type="button">=</button>
