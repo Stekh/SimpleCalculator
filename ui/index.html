@@ -27,12 +27,17 @@
 			display_num();
 		}
 
+		function clr() {
+			invoke('clear_number');
+			display_num();
+		}
+
 	</script>
 	<div id="display">
 		<p id="disp">a</p>
 	</div>
 	<button class="button" type="button" onclick="del()">DEL</button>
-	<button class="button" type="button">CLR</button>
+	<button class="button" type="button" onclick="clr()">CLR</button>
 	<button class="button" type="button">SQRT</button>
 	<button class="button" type="button">/</button>
 	<br>

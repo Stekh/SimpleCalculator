@@ -27,7 +27,7 @@ struct Calculator {
 fn main() {
     tauri::Builder::default()
         .manage(Calculator { num1: Mutex::new("5".to_string()), num2: Mutex::new("0".to_string()), dec: Mutex::new(false), op: Mutex::new(Operation::Nop) })
-        .invoke_handler(tauri::generate_handler![display_number, add_to_number, del_from_number])
+        .invoke_handler(tauri::generate_handler![display_number, add_to_number, del_from_number, clear_number])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -56,4 +56,10 @@ fn del_from_number(state: tauri::State<Calculator>) {
     } else {
         *num = num[..num.len() - 1].to_string();
     }
+}
+
+#[tauri::command]
+fn clear_number(state: tauri::State<Calculator>) {
+    let mut num = state.num1.lock().unwrap();
+    *num = "0".to_string();
 }
