@@ -25,6 +25,7 @@ struct Calculator {
 fn main() {
     tauri::Builder::default()
         .manage(Calculator { num1: 0.0, num2: 0.0, op: Operation::Nop })
+        .invoke_handler(tauri::generate_handler![display_number])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

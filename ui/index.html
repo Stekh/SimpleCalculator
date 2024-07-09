@@ -7,6 +7,14 @@
 	<title>Calculator</title>
 </head>
 <body>
+	<script>
+		// access global API
+		const { invoke } = window.__TAURI__.tauri
+
+		function display_number() {
+			invoke('display_number').then((response) => window.display.innerHTML = response);
+		}
+	</script>
 	<div id="display">
 		<p>0</p>
 	</div>
