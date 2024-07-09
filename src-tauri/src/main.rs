@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri;
+use std::sync::Mutex;
 
 enum Operation {
     Add,
@@ -17,14 +18,15 @@ enum Operation {
 }
 
 struct Calculator {
-    num1: f64,
-    num2: f64,
-    op: Operation,
+    num1: Mutex<String>,
+    num2: Mutex<String>,
+    dec: Mutex<bool>,
+    op: Mutex<Operation>,
 }
 
 fn main() {
     tauri::Builder::default()
-        .manage(Calculator { num1: 0.0, num2: 0.0, op: Operation::Nop })
+        .manage(Calculator { num1: Mutex::new("5".to_string()), num2: Mutex::new("0".to_string()), dec: Mutex::new(false), op: Mutex::new(Operation::Nop) })
         .invoke_handler(tauri::generate_handler![display_number])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -32,5 +34,6 @@ fn main() {
 
 #[tauri::command]
 fn display_number(state: tauri::State<Calculator>) -> String {
-    format!("{}", state.num1)
+    let num = state.num1.lock().unwrap();
+    format!("{}", *num)
 }

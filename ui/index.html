@@ -11,15 +11,15 @@
 		// access global API
 		const { invoke } = window.__TAURI__.tauri
 
-		function display_number() {
-			invoke('display_number').then((response) => window.display.innerHTML = response);
+		function display_num() {
+			invoke('display_number').then((response) => { window.disp.innerHTML = response });
 		}
 
-		display_number();
+		display_num();
 
 	</script>
 	<div id="display">
-		<p>0</p>
+		<p id="disp">a</p>
 	</div>
 	<button class="button" type="button">DEL</button>
 	<button class="button" type="button">CLR</button>
