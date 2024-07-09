@@ -17,6 +17,11 @@
 
 		display_num();
 
+		function inp(num) {
+			invoke('add_to_number', {add: num});
+			display_num();
+		}
+
 	</script>
 	<div id="display">
 		<p id="disp">a</p>
@@ -26,24 +31,24 @@
 	<button class="button" type="button">SQRT</button>
 	<button class="button" type="button">/</button>
 	<br>
-	<button class="button" type="button">7</button>
-	<button class="button" type="button">8</button>
-	<button class="button" type="button">9</button>
+	<button class="button" type="button" onclick="inp('7')">7</button>
+	<button class="button" type="button" onclick="inp('8')">8</button>
+	<button class="button" type="button" onclick="inp('9')">9</button>
 	<button class="button" type="button">*</button>
 	<br>
-	<button class="button" type="button">4</button>
-	<button class="button" type="button">5</button>
-	<button class="button" type="button">6</button>
+	<button class="button" type="button" onclick="inp('4')">4</button>
+	<button class="button" type="button" onclick="inp('5')">5</button>
+	<button class="button" type="button" onclick="inp('6')">6</button>
 	<button class="button" type="button">-</button>
 	<br>
-	<button class="button" type="button">1</button>
-	<button class="button" type="button">2</button>
-	<button class="button" type="button">3</button>
+	<button class="button" type="button" onclick="inp('1')">1</button>
+	<button class="button" type="button" onclick="inp('2')">2</button>
+	<button class="button" type="button" onclick="inp('3')">3</button>
 	<button class="button" type="button">+</button>
 	<br>
 	<button class="button" type="button">+/-</button>
-	<button class="button" type="button">0</button>
-	<button class="button" type="button">.</button>
+	<button class="button" type="button" onclick="inp('0')">0</button>
+	<button class="button" type="button" onclick="inp('.')">.</button>
 	<button class="button" type="button">=</button>
 	<br>
 </body>
