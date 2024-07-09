@@ -24,7 +24,12 @@ struct Calculator {
 
 fn main() {
     tauri::Builder::default()
-        .manage(Calculator {num1: 0.0, num2: 0.0, op: Operation::Nop})
+        .manage(Calculator { num1: 0.0, num2: 0.0, op: Operation::Nop })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+#[tauri::command]
+fn display_number(state: tauri::State<Calculator>) -> String {
+    format!("{}", state.num1)
 }
