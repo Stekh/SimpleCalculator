@@ -51,7 +51,7 @@ fn add_to_number(add: &str, state: tauri::State<Calculator>) {
 #[tauri::command]
 fn del_from_number(state: tauri::State<Calculator>) {
     let mut num = state.num1.lock().unwrap();
-    if num.len() <= 1 {
+    if num.len() <= 1 || (num.len() == 2 && num.contains('-')) {
         *num = "0".to_string();
     } else {
         *num = num[..num.len() - 1].to_string();
