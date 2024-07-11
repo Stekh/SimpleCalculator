@@ -9,10 +9,6 @@ enum Operation {
     Subtract,
     Multiply,
     Divide,
-    SQRT,
-    Flip,
-    Del,
-    Clear,
     Calc,
     Nop,
 }
@@ -27,7 +23,7 @@ struct Calculator {
 fn main() {
     tauri::Builder::default()
         .manage(Calculator { num1: Mutex::new("5".to_string()), num2: Mutex::new("0".to_string()), dec: Mutex::new(false), op: Mutex::new(Operation::Nop) })
-        .invoke_handler(tauri::generate_handler![display_number, add_to_number, del_from_number, clear_number, flip_sign, square_root])
+        .invoke_handler(tauri::generate_handler![display_number, add_to_number, del_from_number, clear_number, flip_sign, square_root, set_operation])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -73,6 +69,9 @@ fn clear_number(state: tauri::State<Calculator>) {
 
     let mut dec = state.dec.lock().unwrap();
     *dec = false;
+
+    let mut op = state.op.lock().unwrap();
+    *op = Operation::Nop;
 }
 
 #[tauri::command]
@@ -90,4 +89,16 @@ fn square_root(state: tauri::State<Calculator>) {
     let mut num = state.num1.lock().unwrap();
     let tmp: f64 = num.parse().unwrap();
     *num = tmp.sqrt().to_string();
+}
+
+#[tauri::command]
+fn set_operation(oper: &str, state: tauri::State<Calculator>) {
+    let mut op = state.op.lock().unwrap();
+    match oper {
+        "add" => *op = Operation::Add,
+        "sub" => *op = Operation::Subtract,
+        "mul" => *op = Operation::Multiply,
+        "div" => *op = Operation::Divide,
+        _ => *op = Operation::Nop,
+    }
 }

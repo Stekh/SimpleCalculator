@@ -32,6 +32,11 @@
 			display_num();
 		}
 
+		function sop(oper) {
+			invoke('set_operation', {oper: oper});
+			display_num();
+		}
+
 		function flp() {
 			invoke('flip_sign');
 			display_num();
@@ -49,22 +54,22 @@
 	<button class="button" type="button" onclick="del()">DEL</button>
 	<button class="button" type="button" onclick="clr()">CLR</button>
 	<button class="button" type="button" onclick="sqrt()">SQRT</button>
-	<button class="button" type="button">/</button>
+	<button class="button" type="button" onclick="sop('div')">/</button>
 	<br>
 	<button class="button" type="button" onclick="inp('7')">7</button>
 	<button class="button" type="button" onclick="inp('8')">8</button>
 	<button class="button" type="button" onclick="inp('9')">9</button>
-	<button class="button" type="button">*</button>
+	<button class="button" type="button" onclick="sop('mul')">*</button>
 	<br>
 	<button class="button" type="button" onclick="inp('4')">4</button>
 	<button class="button" type="button" onclick="inp('5')">5</button>
 	<button class="button" type="button" onclick="inp('6')">6</button>
-	<button class="button" type="button">-</button>
+	<button class="button" type="button" onclick="sop('sub')">-</button>
 	<br>
 	<button class="button" type="button" onclick="inp('1')">1</button>
 	<button class="button" type="button" onclick="inp('2')">2</button>
 	<button class="button" type="button" onclick="inp('3')">3</button>
-	<button class="button" type="button">+</button>
+	<button class="button" type="button" onclick="sop('add')">+</button>
 	<br>
 	<button class="button" type="button" onclick="flp()">+/-</button>
 	<button class="button" type="button" onclick="inp('0')">0</button>
