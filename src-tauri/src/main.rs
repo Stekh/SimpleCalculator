@@ -16,12 +16,13 @@ struct Calculator {
     num1: Mutex<String>,
     num2: Mutex<String>,
     dec: Mutex<bool>,
+    rst: Mutex<bool>,
     op: Mutex<Operation>,
 }
 
 fn main() {
     tauri::Builder::default()
-        .manage(Calculator { num1: Mutex::new("5".to_string()), num2: Mutex::new("0".to_string()), dec: Mutex::new(false), op: Mutex::new(Operation::Nop) })
+        .manage(Calculator { num1: Mutex::new("5".to_string()), num2: Mutex::new("0".to_string()), dec: Mutex::new(false), rst: Mutex::new(false), op: Mutex::new(Operation::Nop) })
         .invoke_handler(tauri::generate_handler![display_number, add_to_number, del_from_number, clear_number, flip_sign, square_root, set_operation, calculate])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -37,8 +38,10 @@ fn display_number(state: tauri::State<Calculator>) -> String {
 fn add_to_number(add: &str, state: tauri::State<Calculator>) {
     let mut num = state.num1.lock().unwrap();
     let mut dec = state.dec.lock().unwrap();
-    if *num == "0" && add != "." {
+    let mut rst = state.rst.lock().unwrap();
+    if (*num == "0" && add != ".") || *rst {
         *num = add.to_string();
+        if *rst { *rst = false; }
     } else if add != "." || (add == "." && !*dec) {
         *num += add;
         if add == "." {
@@ -103,7 +106,9 @@ fn set_operation(oper: &str, state: tauri::State<Calculator>) {
 
     let num1 = state.num1.lock().unwrap();
     let mut num2 = state.num2.lock().unwrap();
+    let mut rst = state.rst.lock().unwrap();
     *num2 = num1.clone();
+    *rst = true;
 }
 
 #[tauri::command]
