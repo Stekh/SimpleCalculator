@@ -22,7 +22,7 @@ struct Calculator {
 
 fn main() {
     tauri::Builder::default()
-        .manage(Calculator { num1: Mutex::new("5".to_string()), num2: Mutex::new("0".to_string()), dec: Mutex::new(false), rst: Mutex::new(false), op: Mutex::new(Operation::Nop) })
+        .manage(Calculator { num1: Mutex::new("0".to_string()), num2: Mutex::new("0".to_string()), dec: Mutex::new(false), rst: Mutex::new(false), op: Mutex::new(Operation::Nop) })
         .invoke_handler(tauri::generate_handler![display_number, add_to_number, del_from_number, clear_number, flip_sign, square_root, set_operation, calculate])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
