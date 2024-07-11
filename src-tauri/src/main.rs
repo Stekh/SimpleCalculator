@@ -92,6 +92,10 @@ fn flip_sign(state: tauri::State<Calculator>) {
 #[tauri::command]
 fn square_root(state: tauri::State<Calculator>) {
     let mut num = state.num1.lock().unwrap();
+    if num.contains('-') {
+        return;
+    }
+
     let tmp: f64 = num.parse().unwrap();
     *num = tmp.sqrt().to_string();
 }
