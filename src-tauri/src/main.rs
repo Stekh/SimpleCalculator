@@ -39,7 +39,7 @@ fn add_to_number(add: &str, state: tauri::State<Calculator>) {
     let mut num = state.num1.lock().unwrap();
     let mut dec = state.dec.lock().unwrap();
     let mut rst = state.rst.lock().unwrap();
-    if (*num == "0" && add != ".") || *rst {
+    if (*num == "0" && add != ".") || *rst || *num == "math error" {
         *num = add.to_string();
         if *rst {
             *rst = false;
@@ -56,7 +56,7 @@ fn add_to_number(add: &str, state: tauri::State<Calculator>) {
 #[tauri::command]
 fn del_from_number(state: tauri::State<Calculator>) {
     let mut num = state.num1.lock().unwrap();
-    if num.len() <= 1 || (num.len() == 2 && num.contains('-')) {
+    if num.len() <= 1 || (num.len() == 2 && num.contains('-')) || *num == "math error"  {
         *num = "0".to_string();
     } else {
         if num.chars().last().unwrap() == '.' {
@@ -128,6 +128,15 @@ fn calculate(state: tauri::State<Calculator>) {
     let mut num1 = state.num1.lock().unwrap();
     let mut num2 = state.num2.lock().unwrap();
     let mut op = state.op.lock().unwrap();
+
+    if *num1 == "0" {
+        *num1 = "math error".to_string();
+        *op = Operation::Nop;
+        *num2 = String::new();
+        return;
+    } else if num2.is_empty() {
+        return;
+    }
 
     let n1: f64 = num1.parse().unwrap();
     let n2: f64 = num2.parse().unwrap();
