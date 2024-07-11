@@ -41,7 +41,10 @@ fn add_to_number(add: &str, state: tauri::State<Calculator>) {
     let mut rst = state.rst.lock().unwrap();
     if (*num == "0" && add != ".") || *rst {
         *num = add.to_string();
-        if *rst { *rst = false; }
+        if *rst {
+            *rst = false;
+            *dec = false;
+        }
     } else if add != "." || (add == "." && !*dec) {
         *num += add;
         if add == "." {
