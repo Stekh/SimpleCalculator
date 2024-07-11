@@ -22,7 +22,7 @@ struct Calculator {
 
 fn main() {
     tauri::Builder::default()
-        .manage(Calculator { num1: Mutex::new("0".to_string()), num2: Mutex::new("0".to_string()), dec: Mutex::new(false), rst: Mutex::new(false), op: Mutex::new(Operation::Nop) })
+        .manage(Calculator { num1: Mutex::new("0".to_string()), num2: Mutex::new("".to_string()), dec: Mutex::new(false), rst: Mutex::new(false), op: Mutex::new(Operation::Nop) })
         .invoke_handler(tauri::generate_handler![display_number, add_to_number, del_from_number, clear_number, flip_sign, square_root, set_operation, calculate])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -103,6 +103,13 @@ fn square_root(state: tauri::State<Calculator>) {
 #[tauri::command]
 fn set_operation(oper: &str, state: tauri::State<Calculator>) {
     let mut op = state.op.lock().unwrap();
+    let num1 = state.num1.lock().unwrap();
+    let mut num2 = state.num2.lock().unwrap();
+
+    if !num2.is_empty() {
+        return;
+    }
+
     match oper {
         "add" => *op = Operation::Add,
         "sub" => *op = Operation::Subtract,
@@ -111,8 +118,6 @@ fn set_operation(oper: &str, state: tauri::State<Calculator>) {
         _ => *op = Operation::Nop,
     }
 
-    let num1 = state.num1.lock().unwrap();
-    let mut num2 = state.num2.lock().unwrap();
     let mut rst = state.rst.lock().unwrap();
     *num2 = num1.clone();
     *rst = true;
@@ -121,8 +126,8 @@ fn set_operation(oper: &str, state: tauri::State<Calculator>) {
 #[tauri::command]
 fn calculate(state: tauri::State<Calculator>) {
     let mut num1 = state.num1.lock().unwrap();
-    let num2 = state.num2.lock().unwrap();
-    let op = state.op.lock().unwrap();
+    let mut num2 = state.num2.lock().unwrap();
+    let mut op = state.op.lock().unwrap();
 
     let n1: f64 = num1.parse().unwrap();
     let n2: f64 = num2.parse().unwrap();
@@ -134,4 +139,7 @@ fn calculate(state: tauri::State<Calculator>) {
         Operation::Divide => *num1 = (n2 / n1).to_string(),
         Operation::Nop => (),
     }
+
+    *op = Operation::Nop;
+    *num2 = String::new();
 }
