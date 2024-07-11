@@ -41,10 +41,14 @@ fn display_number(state: tauri::State<Calculator>) -> String {
 #[tauri::command]
 fn add_to_number(add: &str, state: tauri::State<Calculator>) {
     let mut num = state.num1.lock().unwrap();
-    if *num == "0" {
+    let mut dec = state.dec.lock().unwrap();
+    if *num == "0" && add != "." {
         *num = add.to_string();
-    } else {
+    } else if add != "." || (add == "." && !*dec) {
         *num += add;
+        if add == "." {
+            *dec = true;
+        }
     }
 }
 
@@ -54,6 +58,10 @@ fn del_from_number(state: tauri::State<Calculator>) {
     if num.len() <= 1 || (num.len() == 2 && num.contains('-')) {
         *num = "0".to_string();
     } else {
+        if num.chars().last().unwrap() == '.' {
+            let mut dec = state.dec.lock().unwrap();
+            *dec = false;
+        }
         *num = num[..num.len() - 1].to_string();
     }
 }
@@ -62,6 +70,9 @@ fn del_from_number(state: tauri::State<Calculator>) {
 fn clear_number(state: tauri::State<Calculator>) {
     let mut num = state.num1.lock().unwrap();
     *num = "0".to_string();
+
+    let mut dec = state.dec.lock().unwrap();
+    *dec = false;
 }
 
 #[tauri::command]
