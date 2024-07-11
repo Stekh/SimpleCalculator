@@ -47,6 +47,11 @@
 			display_num();
 		}
 
+		function clc() {
+			invoke('calculate');
+			display_num();
+		}
+
 	</script>
 	<div id="display">
 		<p id="disp">a</p>
@@ -74,7 +79,7 @@
 	<button class="button" type="button" onclick="flp()">+/-</button>
 	<button class="button" type="button" onclick="inp('0')">0</button>
 	<button class="button" type="button" onclick="inp('.')">.</button>
-	<button class="button" type="button">=</button>
+	<button class="button" type="button" onclick="clc()">=</button>
 	<br>
 </body>
 </html>

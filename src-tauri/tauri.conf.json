@@ -56,10 +56,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 295,
+        "height": 323,
         "resizable": true,
         "title": "Calculator",
-        "width": 225
+        "width": 242
       }
     ]
   }

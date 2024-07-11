@@ -9,7 +9,6 @@ enum Operation {
     Subtract,
     Multiply,
     Divide,
-    Calc,
     Nop,
 }
 
@@ -23,7 +22,7 @@ struct Calculator {
 fn main() {
     tauri::Builder::default()
         .manage(Calculator { num1: Mutex::new("5".to_string()), num2: Mutex::new("0".to_string()), dec: Mutex::new(false), op: Mutex::new(Operation::Nop) })
-        .invoke_handler(tauri::generate_handler![display_number, add_to_number, del_from_number, clear_number, flip_sign, square_root, set_operation])
+        .invoke_handler(tauri::generate_handler![display_number, add_to_number, del_from_number, clear_number, flip_sign, square_root, set_operation, calculate])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -100,5 +99,27 @@ fn set_operation(oper: &str, state: tauri::State<Calculator>) {
         "mul" => *op = Operation::Multiply,
         "div" => *op = Operation::Divide,
         _ => *op = Operation::Nop,
+    }
+
+    let num1 = state.num1.lock().unwrap();
+    let mut num2 = state.num2.lock().unwrap();
+    *num2 = num1.clone();
+}
+
+#[tauri::command]
+fn calculate(state: tauri::State<Calculator>) {
+    let mut num1 = state.num1.lock().unwrap();
+    let num2 = state.num2.lock().unwrap();
+    let op = state.op.lock().unwrap();
+
+    let n1: f64 = num1.parse().unwrap();
+    let n2: f64 = num2.parse().unwrap();
+
+    match *op {
+        Operation::Add => *num1 = (n2 + n1).to_string(),
+        Operation::Subtract => *num1 = (n2 - n1).to_string(),
+        Operation::Multiply => *num1 = (n2 * n1).to_string(),
+        Operation::Divide => *num1 = (n2 / n1).to_string(),
+        Operation::Nop => (),
     }
 }
