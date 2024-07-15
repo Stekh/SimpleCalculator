@@ -103,7 +103,7 @@ fn square_root(state: tauri::State<Calculator>) {
     let tmp: f64 = num.parse().unwrap();
     *num = tmp.sqrt().to_string();
 
-    if !num.chars().all(|arg0: char| char::is_ascii_digit(&arg0)) {
+    if num.contains(".") {
         *dec = true;
     }
 }
