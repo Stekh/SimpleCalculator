@@ -101,60 +101,6 @@ fn square_root(state: tauri::State<Calculator>) {
     let tmp: f64 = num.parse().unwrap();
     *num = tmp.sqrt().to_string();
 }
-/*
-#[tauri::command]
-fn set_operation(oper: &str, state: tauri::State<Calculator>) {
-    let mut op = state.op.lock().unwrap();
-    let num1 = state.num1.lock().unwrap();
-    let mut num2 = state.num2.lock().unwrap();
-
-    if !num2.is_empty() {
-        return;
-    }
-
-    match oper {
-        "add" => *op = Operation::Add,
-        "sub" => *op = Operation::Subtract,
-        "mul" => *op = Operation::Multiply,
-        "div" => *op = Operation::Divide,
-        _ => *op = Operation::Nop,
-    }
-
-    let mut rst = state.rst.lock().unwrap();
-    *num2 = num1.clone();
-    *rst = true;
-}
-
-#[tauri::command]
-fn calculate(state: tauri::State<Calculator>) {
-    let mut num1 = state.num1.lock().unwrap();
-    let mut num2 = state.num2.lock().unwrap();
-    let mut op = state.op.lock().unwrap();
-
-    if *num1 == "0" {
-        *num1 = "math error".to_string();
-        *op = Operation::Nop;
-        *num2 = String::new();
-        return;
-    } else if num2.is_empty() {
-        return;
-    }
-
-    let n1: f64 = num1.parse().unwrap();
-    let n2: f64 = num2.parse().unwrap();
-
-    match *op {
-        Operation::Add => *num1 = (n2 + n1).to_string(),
-        Operation::Subtract => *num1 = (n2 - n1).to_string(),
-        Operation::Multiply => *num1 = (n2 * n1).to_string(),
-        Operation::Divide => *num1 = (n2 / n1).to_string(),
-        Operation::Nop => (),
-    }
-
-    *op = Operation::Nop;
-    *num2 = String::new();
-}
-*/
 
 fn calc(num1: f64, num2: f64, operation: Operation) -> f64 {
     match operation {
