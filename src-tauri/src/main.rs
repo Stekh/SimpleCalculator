@@ -160,8 +160,8 @@ fn calc(num1: f64, num2: f64, operation: Operation) -> f64 {
     match operation {
         Operation::Add => num2 + num1,
         Operation::Subtract => num2 - num1,
-        Operation::Multiply => num2 - num1,
-        Operation::Divide => num2 - num1,
+        Operation::Multiply => num2 * num1,
+        Operation::Divide => num2 / num1,
         Operation::Nop => f64::NAN,
     }
 }
