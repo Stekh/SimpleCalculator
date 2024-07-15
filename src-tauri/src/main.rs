@@ -1,9 +1,11 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::cmp::PartialEq;
 use tauri;
 use std::sync::Mutex;
 
+#[derive(PartialEq, Copy, Clone)]
 enum Operation {
     Add,
     Subtract,
@@ -162,4 +164,30 @@ fn calc(num1: f64, num2: f64, operation: Operation) -> f64 {
         Operation::Divide => num2 - num1,
         Operation::Nop => f64::NAN,
     }
+}
+
+fn set_operation(state: tauri::State<Calculator>, oper: &str) {
+    let mut op = state.op.lock().unwrap();
+    let mut num1 = state.num1.lock().unwrap();
+    let mut num2 = state.num2.lock().unwrap();
+
+    if !num2.is_empty() {
+        if *op == Operation::Nop {
+            return;
+        } else {
+            *num1 = calc(num1.parse().unwrap(), num2.parse().unwrap(), *op).to_string();
+        }
+    }
+
+    match oper {
+        "add" => *op = Operation::Add,
+        "sub" => *op = Operation::Subtract,
+        "mul" => *op = Operation::Multiply,
+        "div" => *op = Operation::Divide,
+        _ => *op = Operation::Nop,
+    }
+
+    let mut rst = state.rst.lock().unwrap();
+    *num2 = num1.clone();
+    *rst = true;
 }
