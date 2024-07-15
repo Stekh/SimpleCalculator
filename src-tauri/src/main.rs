@@ -166,6 +166,7 @@ fn calc(num1: f64, num2: f64, operation: Operation) -> f64 {
     }
 }
 
+#[tauri::command]
 fn set_operation(state: tauri::State<Calculator>, oper: &str) {
     let mut op = state.op.lock().unwrap();
     let mut num1 = state.num1.lock().unwrap();
@@ -190,4 +191,25 @@ fn set_operation(state: tauri::State<Calculator>, oper: &str) {
     let mut rst = state.rst.lock().unwrap();
     *num2 = num1.clone();
     *rst = true;
+}
+
+#[tauri::command]
+fn calculate(state: tauri::State<Calculator>) {
+    let mut num1 = state.num1.lock().unwrap();
+    let mut num2 = state.num2.lock().unwrap();
+    let mut op = state.op.lock().unwrap();
+
+    if *num1 == "0" {
+        *num1 = "math error".to_string();
+        *op = Operation::Nop;
+        *num2 = String::new();
+        return;
+    } else if num2.is_empty() {
+        return;
+    }
+
+    *num1 = calc(num1.parse().unwrap(), num2.parse().unwrap(), *op).to_string();
+
+    *op = Operation::Nop;
+    *num2 = String::new();
 }
