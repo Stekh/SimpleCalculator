@@ -99,7 +99,7 @@ fn square_root(state: tauri::State<Calculator>) {
     let tmp: f64 = num.parse().unwrap();
     *num = tmp.sqrt().to_string();
 }
-
+/*
 #[tauri::command]
 fn set_operation(oper: &str, state: tauri::State<Calculator>) {
     let mut op = state.op.lock().unwrap();
@@ -151,4 +151,15 @@ fn calculate(state: tauri::State<Calculator>) {
 
     *op = Operation::Nop;
     *num2 = String::new();
+}
+*/
+
+fn calc(num1: f64, num2: f64, operation: Operation) -> f64 {
+    match operation {
+        Operation::Add => num2 + num1,
+        Operation::Subtract => num2 - num1,
+        Operation::Multiply => num2 - num1,
+        Operation::Divide => num2 - num1,
+        Operation::Nop => f64::NAN,
+    }
 }
