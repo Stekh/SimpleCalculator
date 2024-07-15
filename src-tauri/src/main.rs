@@ -1,9 +1,11 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::cmp::PartialEq;
 use tauri;
 use std::sync::Mutex;
 
+#[derive(PartialEq, Copy, Clone)]
 enum Operation {
     Add,
     Subtract,
@@ -100,14 +102,28 @@ fn square_root(state: tauri::State<Calculator>) {
     *num = tmp.sqrt().to_string();
 }
 
+fn calc(num1: f64, num2: f64, operation: Operation) -> f64 {
+    match operation {
+        Operation::Add => num2 + num1,
+        Operation::Subtract => num2 - num1,
+        Operation::Multiply => num2 * num1,
+        Operation::Divide => num2 / num1,
+        Operation::Nop => f64::NAN,
+    }
+}
+
 #[tauri::command]
-fn set_operation(oper: &str, state: tauri::State<Calculator>) {
+fn set_operation(state: tauri::State<Calculator>, oper: &str) {
     let mut op = state.op.lock().unwrap();
-    let num1 = state.num1.lock().unwrap();
+    let mut num1 = state.num1.lock().unwrap();
     let mut num2 = state.num2.lock().unwrap();
 
     if !num2.is_empty() {
-        return;
+        if *op == Operation::Nop {
+            return;
+        } else {
+            *num1 = calc(num1.parse().unwrap(), num2.parse().unwrap(), *op).to_string();
+        }
     }
 
     match oper {
@@ -138,16 +154,7 @@ fn calculate(state: tauri::State<Calculator>) {
         return;
     }
 
-    let n1: f64 = num1.parse().unwrap();
-    let n2: f64 = num2.parse().unwrap();
-
-    match *op {
-        Operation::Add => *num1 = (n2 + n1).to_string(),
-        Operation::Subtract => *num1 = (n2 - n1).to_string(),
-        Operation::Multiply => *num1 = (n2 * n1).to_string(),
-        Operation::Divide => *num1 = (n2 / n1).to_string(),
-        Operation::Nop => (),
-    }
+    *num1 = calc(num1.parse().unwrap(), num2.parse().unwrap(), *op).to_string();
 
     *op = Operation::Nop;
     *num2 = String::new();
