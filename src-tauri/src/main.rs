@@ -61,7 +61,7 @@ fn del_from_number(state: tauri::State<Calculator>) {
     if num.len() <= 1 || (num.len() == 2 && num.contains('-')) || *num == "math error"  {
         *num = "0".to_string();
     } else {
-        if num.chars().last().unwrap() == '.' {
+        if num.ends_with(".") {
             let mut dec = state.dec.lock().unwrap();
             *dec = false;
         }
