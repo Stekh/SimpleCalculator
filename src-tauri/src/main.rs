@@ -145,7 +145,7 @@ fn calculate(state: tauri::State<Calculator>) {
     let mut num2 = state.num2.lock().unwrap();
     let mut op = state.op.lock().unwrap();
 
-    if *num1 == "0" {
+    if *op == Operation::Divide && *num1 == "0" {
         *num1 = "math error".to_string();
         *op = Operation::Nop;
         *num2 = String::new();
