@@ -5,7 +5,7 @@ description = "Probably the worst calculator app you'll ever use"
 authors = ["you"]
 license = ""
 repository = ""
-default-run = "app"
+default-run = "calculator"
 edition = "2021"
 rust-version = "1.60"
 
