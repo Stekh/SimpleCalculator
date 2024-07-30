@@ -129,6 +129,10 @@ fn set_operation(state: tauri::State<Calculator>, oper: &str) {
             return;
         } else {
             *num1 = calc(num1.parse().unwrap(), num2.parse().unwrap(), *op).to_string();
+            if num1.contains(".") {
+                let mut dec = state.dec.lock().unwrap();
+                *dec = true;
+            }
         }
     }
 
@@ -161,6 +165,10 @@ fn calculate(state: tauri::State<Calculator>) {
     }
 
     *num1 = calc(num1.parse().unwrap(), num2.parse().unwrap(), *op).to_string();
+    if num1.contains(".") {
+        let mut dec = state.dec.lock().unwrap();
+        *dec = true;
+    }
 
     *op = Operation::Nop;
     *num2 = String::new();
